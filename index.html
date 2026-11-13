@@ -1,0 +1,523 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>СовТех — техника и запчасти</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600&family=Manrope:wght@400;500;600;700&display=swap");
+:root {
+  --bg: #0A0C10; --bg2: #101319; --fg: #ECEEF2; --muted: #9AA3AF; --faint: #5F6874;
+  --line: rgba(255,255,255,.1); --accent: #E9A23B; --accent-ink: #15100A;
+  --display: "Unbounded", "Arial", sans-serif;
+  --text: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); scrollbar-color: #2a2f38 var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 16px/1.6 var(--text); overflow-x: hidden; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+a { color: inherit; }
+img { display: block; max-width: 100%; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.12; text-wrap: balance; margin: 0 0 .5em; letter-spacing: -.02em; }
+h1 { font-size: clamp(2rem, 4.6vw, 3.6rem); }
+h2 { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+h3 { font-size: 1.05rem; letter-spacing: -.01em; }
+p { margin: 0 0 1em; max-width: 62ch; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.sec { padding-block: clamp(64px, 9vw, 120px); }
+.muted { color: var(--muted); }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; font: 600 15px var(--text); text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: transform .25s var(--ease-out), background-color .25s, color .25s, border-color .25s; }
+.btn.solid { background: var(--accent); color: var(--accent-ink); }
+.btn.line { border-color: rgba(255,255,255,.24); color: var(--fg); }
+.btn:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) {
+  .btn.solid:hover { background: #F2B24E; }
+  .btn.line:hover { border-color: var(--accent); color: var(--accent); }
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(10,12,16,.82); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.top .wrap { display: flex; align-items: center; gap: 28px; min-height: 66px; flex-wrap: wrap; padding-block: 10px; }
+.logo { font: 600 17px var(--display); text-decoration: none; letter-spacing: -.01em; margin-right: auto; }
+.nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.nav a { text-decoration: none; font-size: 14px; color: var(--muted); padding-block: 4px; transition: color .2s; }
+.nav a:hover, .nav a[aria-current="page"] { color: var(--fg); }
+.phone { font-size: 14px; font-weight: 600; text-decoration: none; }
+
+/* hero */
+.hero .wrap { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(28px, 5vw, 72px); align-items: center; padding-block: clamp(56px, 8vw, 110px); }
+.hero .lead { font-size: 18px; color: #B7BFCA; max-width: 44ch; margin-top: 20px; }
+.hero .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.hero figure { margin: 0; }
+.hero img { width: 100%; height: auto; border-radius: 20px; animation: reveal 1.1s var(--ease-out) both; }
+@keyframes reveal { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+
+/* directions as rows, not cards */
+.rows { border-top: 1px solid var(--line); margin-top: 40px; }
+.row { display: grid; grid-template-columns: 1fr 180px; gap: 24px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.row .name { font: 600 clamp(1.1rem, 2vw, 1.5rem) var(--display); letter-spacing: -.01em; transition: color .25s; }
+.row .desc { color: var(--muted); font-size: 15px; margin-top: 6px; }
+.row img { width: 180px; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; transition: transform .5s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .row:hover img { transform: scale(1.03); }
+  .row:hover .name { color: var(--accent); }
+}
+
+/* catalog */
+.toolbar { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 32px 0 36px; }
+.filters { display: flex; gap: 22px; flex-wrap: wrap; }
+.filters a { font-size: 15px; color: var(--muted); text-decoration: none; padding-block: 6px; border-bottom: 1px solid transparent; transition: color .2s, border-color .2s; }
+.filters a[aria-current="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+@media (hover: hover) and (pointer: fine) { .filters a:hover { color: var(--fg); } }
+input.search { font: 500 15px var(--text); color: var(--fg); background: transparent; border: 0; border-bottom: 1px solid var(--line); padding: 8px 2px; width: 280px; max-width: 100%; min-width: 0; border-radius: 0; }
+input.search:focus { outline: none; border-bottom-color: var(--accent); }
+input.search::placeholder { color: var(--faint); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 40px 24px; }
+.card { text-decoration: none; display: block; min-width: 0; }
+.card .frame { overflow: hidden; border-radius: 16px; background: #0E1117; }
+.card img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; transition: transform .7s var(--ease-out); }
+.card .title { font-weight: 600; margin: 16px 0 6px; line-height: 1.35; }
+.card .meta { font-size: 13px; color: var(--muted); }
+.card .meta b { font-weight: 600; color: var(--fg); }
+.card .price { font-size: 14px; color: var(--muted); margin-top: 10px; }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover img { transform: scale(1.03); }
+  .card:hover .title { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+}
+.empty { color: var(--muted); padding: 40px 0; }
+
+/* product */
+.crumbs { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.crumbs a { text-decoration: none; }
+.item { display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
+.item img { width: 100%; border-radius: 20px; background: #0E1117; }
+table.spec { width: 100%; border-collapse: collapse; margin: 22px 0 28px; font-size: 15px; }
+table.spec th, table.spec td { text-align: left; padding: 13px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.spec th { color: var(--muted); font-weight: 500; width: 42%; padding-right: 12px; }
+.price-big { font: 600 22px var(--display); margin: 14px 0 4px; }
+.row-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* text pages */
+.lede { font-size: 18px; color: #B7BFCA; max-width: 58ch; }
+.blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px 32px; margin-top: 48px; border-top: 1px solid var(--line); padding-top: 32px; }
+.blocks h3 { margin-bottom: 10px; }
+.blocks p, .blocks li { color: var(--muted); font-size: 15px; }
+.blocks ul { padding-left: 18px; margin: 0; }
+.blocks li { margin-bottom: 6px; }
+
+/* forms */
+form.req { display: grid; gap: 18px; max-width: 580px; }
+form.req label { display: grid; gap: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+form.req .full { grid-column: 1 / -1; }
+form.req .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+form.req input, form.req select, form.req textarea { font: 500 15px var(--text); color: var(--fg); background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; width: 100%; min-width: 0; transition: border-color .2s; }
+form.req input:focus, form.req select:focus, form.req textarea:focus { border-color: var(--accent); outline: none; }
+form.req option { background: var(--bg2); }
+@media (max-width: 560px) { form.req .pair { grid-template-columns: 1fr; } }
+.ok-msg { margin-top: 16px; max-width: 580px; color: var(--accent); font-size: 15px; }
+.contact-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; }
+.contact-list li { display: flex; flex-direction: column; gap: 4px; font-size: 18px; }
+.contact-list small { color: var(--muted); font-size: 13px; }
+
+/* footer */
+footer.foot { border-top: 1px solid var(--line); background: var(--bg2); padding-block: 56px 36px; color: var(--muted); font-size: 14px; }
+footer.foot .wrap { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 28px; }
+footer.foot a { color: var(--fg); text-decoration: none; display: block; margin-bottom: 8px; }
+footer.foot a:hover { color: var(--accent); }
+footer.foot h3 { color: var(--fg); font: 600 12px var(--text); text-transform: uppercase; letter-spacing: .12em; }
+.legal { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+
+[hidden] { display: none !important; }
+.view { animation: fade .5s var(--ease-out) both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+@media (max-width: 860px) { .hero .wrap, .item { grid-template-columns: 1fr; } footer.foot .wrap { grid-template-columns: 1fr 1fr; } .row { grid-template-columns: 1fr 120px; } .row img { width: 120px; } }
+@media (max-width: 560px) { .nav { display: none; } input.search { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#home">СовТех</a>
+    <nav class="nav" aria-label="Основное меню">
+      <a href="#catalog" data-nav="catalog">Каталог</a>
+      <a href="#about" data-nav="about">О компании</a>
+      <a href="#delivery" data-nav="delivery">Доставка и оплата</a>
+      <a href="#guarantee" data-nav="guarantee">Гарантия</a>
+      <a href="#contacts" data-nav="contacts">Контакты</a>
+    </nav>
+    <a class="phone" href="tel:+79990000000">+7 (999) 000-00-00</a>
+    <a class="btn solid" href="#contacts" style="padding:10px 18px;font-size:14px">Оставить заявку</a>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="view" data-view="home">
+    <div class="hero">
+      <div class="wrap">
+        <div>
+          <h1>Самосвалы, тягачи и спецтехника с наличием и доставкой</h1>
+          <p class="lead">Продаём технику и запчасти для частных клиентов, ИП и организаций. Подберём деталь по артикулу или VIN, проверим наличие и доставим по России.</p>
+          <div class="actions">
+            <a class="btn solid" href="#catalog">Смотреть каталог</a>
+            <a class="btn line" href="#contacts">Подобрать запчасть</a>
+          </div>
+        </div>
+        <figure><img id="hero-img" alt="Самосвал КамАЗ 6520"></figure>
+      </div>
+    </div>
+
+    <div class="wrap sec" style="padding-top:0">
+      <h2>Направления</h2>
+      <div class="rows" id="rows"></div>
+    </div>
+
+    <div class="wrap sec" style="padding-top:0">
+      <h2>Из каталога</h2>
+      <div class="grid" id="home-grid" style="margin-top:32px"></div>
+      <p style="margin-top:40px"><a class="btn line" href="#catalog">Весь каталог</a></p>
+    </div>
+
+    <div class="wrap sec" style="padding-top:0">
+      <h2>Как заказать</h2>
+      <div class="blocks">
+        <div><h3>1. Заявка</h3><p>Телефон, марка или артикул, что нужно.</p></div>
+        <div><h3>2. Уточнение</h3><p>Менеджер проверит наличие, цену и срок.</p></div>
+        <div><h3>3. Документы</h3><p>Договор или счёт для физлиц и организаций.</p></div>
+        <div><h3>4. Передача</h3><p>Доставляем по России или выдаём на складе.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG -->
+  <section class="view wrap sec" data-view="catalog" hidden>
+    <p class="crumbs"><a href="#home">Главная</a> / Каталог</p>
+    <h1>Каталог</h1>
+    <div class="toolbar">
+      <div class="filters" id="filters" role="group" aria-label="Направление"></div>
+      <input class="search" id="q" type="search" placeholder="Название, артикул, марка" aria-label="Поиск">
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty" hidden>Ничего не нашлось. Попробуйте другой запрос или <a href="#contacts">оставьте заявку</a>: подберём.</p>
+  </section>
+
+  <!-- ITEM -->
+  <section class="view wrap sec" data-view="item" hidden>
+    <div id="item-root"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view wrap sec" data-view="about" hidden>
+    <p class="crumbs"><a href="#home">Главная</a> / О компании</p>
+    <h1>Техника и запчасти, на которые можно положиться</h1>
+    <p class="lede">Продаём автомобили, спецтехнику, прицепы и запчасти. Работаем с частными клиентами, ИП и организациями.</p>
+    <div class="blocks">
+      <div><h3>Что продаём</h3><p>Запчасти для грузовиков и легковых авто, легковые и грузовые автомобили, спецтехнику, прицепы и полуприцепы.</p></div>
+      <div><h3>Кому</h3><p>Частным лицам, ИП, строительным и транспортным компаниям, автопаркам.</p></div>
+      <div><h3>Как работаем</h3><p>Честно описываем состояние техники, фотографируем, называем срок поставки до оплаты.</p></div>
+    </div>
+    <p style="margin-top:48px"><a class="btn solid" href="#contacts">Связаться с нами</a></p>
+  </section>
+
+  <!-- DELIVERY -->
+  <section class="view wrap sec" data-view="delivery" hidden>
+    <p class="crumbs"><a href="#home">Главная</a> / Доставка и оплата</p>
+    <h1>Доставка и оплата</h1>
+    <div class="blocks">
+      <div><h3>Доставка</h3><ul><li>Транспортной компанией по России</li><li>Доставка техники своим транспортом</li><li>Самовывоз со склада</li></ul><p style="margin-top:12px">Стоимость и сроки считаем под конкретный заказ.</p></div>
+      <div><h3>Оплата</h3><ul><li>Наличными при самовывозе</li><li>Банковской картой</li><li>Безналичный расчёт по счёту</li></ul><p style="margin-top:12px">Для организаций — счёт и договор.</p></div>
+      <div><h3>Сроки</h3><p>Товар в наличии — от 1 до 3 дней. Под заказ — от 5 до 10 дней. Точный срок укажет менеджер.</p></div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE -->
+  <section class="view wrap sec" data-view="guarantee" hidden>
+    <p class="crumbs"><a href="#home">Главная</a> / Гарантия и возврат</p>
+    <h1>Гарантия и возврат</h1>
+    <div class="blocks">
+      <div><h3>Запчасти</h3><p>Гарантия производителя или продавца — указывается в карточке и в документах.</p></div>
+      <div><h3>Техника</h3><p>Условия гарантии для новой и б/у техники прописываются в договоре.</p></div>
+      <div><h3>Возврат и обмен</h3><p>Условия возврата и обмена согласуем при оформлении заказа и фиксируем в документах.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section class="view wrap sec" data-view="contacts" hidden>
+    <p class="crumbs"><a href="#home">Главная</a> / Контакты</p>
+    <h1>Поговорим о вашей задаче</h1>
+    <div class="blocks" style="grid-template-columns: 1fr 1.3fr; align-items:start">
+      <ul class="contact-list">
+        <li><small>Телефон</small><a href="tel:+79990000000">+7 (999) 000-00-00</a></li>
+        <li><small>WhatsApp / Telegram</small><span>+7 (999) 000-00-00</span></li>
+        <li><small>Email</small><span>info@example.ru</span></li>
+        <li><small>Адрес</small><span>Адрес склада и офиса</span></li>
+        <li><small>График работы</small><span>Пн–Пт, 9:00–18:00</span></li>
+      </ul>
+      <div>
+        <form class="req" id="req">
+          <div class="pair">
+            <label>Имя<input name="name" required autocomplete="name"></label>
+            <label>Телефон<input name="phone" type="tel" required autocomplete="tel" placeholder="+7"></label>
+          </div>
+          <label>Что нужно
+            <select name="topic" id="topic">
+              <option>Запчасть</option><option>Легковой автомобиль</option><option>Грузовой автомобиль</option><option>Спецтехника</option><option>Прицеп или полуприцеп</option><option>Другое</option>
+            </select>
+          </label>
+          <div class="pair">
+            <label>Марка и модель<input name="model"></label>
+            <label>Артикул или VIN<input name="art"></label>
+          </div>
+          <label class="full">Комментарий<textarea name="comment" rows="3"></textarea></label>
+          <div><button class="btn solid" type="submit">Отправить заявку</button></div>
+        </form>
+        <p class="ok-msg" id="ok" hidden>Демо-версия: заявка не отправлена. Подключим отправку на почту или в CRM.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <h3 style="font-family:var(--display);text-transform:none;letter-spacing:-.01em;font-size:17px;font-weight:600">СовТех</h3>
+      <p>Техника, запчасти и прицепы. Реквизиты компании — по запросу.</p>
+    </div>
+    <div>
+      <h3>Каталог</h3>
+      <a href="#catalog-parts">Запчасти</a><a href="#catalog-cars">Легковые авто</a><a href="#catalog-trucks">Грузовые авто</a><a href="#catalog-special">Спецтехника</a><a href="#catalog-trailers">Прицепы</a>
+    </div>
+    <div>
+      <h3>Информация</h3>
+      <a href="#about">О компании</a><a href="#delivery">Доставка и оплата</a><a href="#guarantee">Гарантия и возврат</a>
+    </div>
+    <div>
+      <h3>Связь</h3>
+      <a href="tel:+79990000000">+7 (999) 000-00-00</a><a href="#contacts">Оставить заявку</a>
+    </div>
+  </div>
+  <div class="wrap"><p class="legal">Карточки, цены и контакты на этой странице — примеры для демонстрации.</p></div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* Renders built at load from real geometry: physical paint with clearcoat, chrome, glass,
+   an environment map from softboxes, soft shadows. Each becomes a JPEG in SHOTS. */
+const SHOTS = {};
+(function renderAll() {
+  const R = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  R.setSize(1200, 750, false);
+  R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
+  R.outputEncoding = THREE.sRGBEncoding; R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = .9;
+  R.setClearColor(0x0c0f14, 1);
+
+  const es = new THREE.Scene();
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(40, 32, 16), new THREE.MeshBasicMaterial({ color: 0x1a1f28, side: THREE.BackSide })));
+  const sb = (w, h, x, y, z, c, k) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); es.add(m); };
+  sb(30, 14, 0, 28, 0, 0xffffff, 1.6); sb(14, 30, -28, 10, 8, 0xfff1d6, 1.2); sb(14, 30, 26, 12, -10, 0xe4f1ff, 0.9); sb(40, 6, 0, 3, -30, 0xffffff, 0.6);
+  const ENV = new THREE.PMREMGenerator(R).fromScene(es, 0.04).texture;
+
+  const paint = c => new THREE.MeshPhysicalMaterial({ color: c, roughness: .36, clearcoat: 1, clearcoatRoughness: .05, envMap: ENV, envMapIntensity: .6 });
+  const DARK = new THREE.MeshStandardMaterial({ color: 0x1a1d23, roughness: .65, metalness: .3, envMap: ENV });
+  const TYRE = new THREE.MeshStandardMaterial({ color: 0x0d0e11, roughness: .9, envMap: ENV });
+  const ALLOY = new THREE.MeshPhysicalMaterial({ color: 0xb9c0ca, metalness: 1, roughness: .22, envMap: ENV, envMapIntensity: 1.2 });
+  const CHROME = new THREE.MeshPhysicalMaterial({ color: 0xe6eaf0, metalness: 1, roughness: .1, envMap: ENV, envMapIntensity: 1.4 });
+  const GLASS = new THREE.MeshPhysicalMaterial({ color: 0x0b1620, metalness: .2, roughness: .03, clearcoat: 1, envMap: ENV, envMapIntensity: 1.8 });
+  const LAMP = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xfff1c4, emissiveIntensity: 1.4 });
+
+  const add = (g, geo, m, x, y, z, rx = 0, ry = 0, rz = 0) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); o.rotation.set(rx, ry, rz); o.castShadow = o.receiveShadow = true; g.add(o); return o; };
+  const B = (g, w, h, d, m, x, y, z, rz = 0) => add(g, new THREE.BoxGeometry(w, h, d), m, x, y, z, 0, 0, rz);
+  const CYL_Z = (g, r, len, m, x, y, z) => add(g, new THREE.CylinderGeometry(r, r, len, 40), m, x, y, z, Math.PI / 2);
+  const wheel = (g, x, z, r = .52, w = .36) => { CYL_Z(g, r, w, TYRE, x, r, z); CYL_Z(g, r * .62, w + .03, ALLOY, x, r, z); };
+
+  function stage(make, cam, look) {
+    const s = new THREE.Scene();
+    s.add(new THREE.HemisphereLight(0xc8d8ff, 0x0a0c10, .35));
+    const key = new THREE.DirectionalLight(0xffffff, 1.7); key.position.set(7, 11, 6); key.castShadow = true;
+    key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, far: 40 }); key.shadow.radius = 5; key.shadow.bias = -.0004;
+    s.add(key);
+    const rim = new THREE.DirectionalLight(0xffd7a0, 1.6); rim.position.set(-9, 6, -7); s.add(rim);
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(40, 80), new THREE.ShadowMaterial({ opacity: .6 }));
+    floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; s.add(floor);
+    s.add(make());
+    const c = new THREE.PerspectiveCamera(26, 1200 / 750, .1, 200);
+    c.position.set(...cam); c.lookAt(...look);
+    R.render(s, c);
+    return R.domElement.toDataURL('image/jpeg', .92);
+  }
+
+  function dumpTruck(p) {
+    const g = new THREE.Group(), P = paint(p);
+    B(g, 6.6, .34, 1.7, DARK, -.5, 1.0, 0);                       // chassis
+    B(g, 1.45, 1.55, 2.15, P, 2.7, 1.9, 0);                       // cab
+    B(g, 1.25, .14, 2.05, P, 2.65, 2.75, 0);                      // roof
+    B(g, .05, .95, 1.95, GLASS, 3.44, 2.05, 0);                   // windscreen
+    B(g, .9, .6, .03, GLASS, 2.55, 2.15, 1.09); B(g, .9, .6, .03, GLASS, 2.55, 2.15, -1.09);
+    B(g, 1.15, .75, 1.95, P, 4.0, 1.25, 0);                       // bonnet
+    B(g, .05, .55, 1.6, CHROME, 4.59, 1.18, 0);                   // grille
+    B(g, .04, .14, .32, LAMP, 4.6, 1.5, .7); B(g, .04, .14, .32, LAMP, 4.6, 1.5, -.7);
+    B(g, .25, .22, 2.0, DARK, 4.62, .78, 0);                      // bumper
+    B(g, 4.0, .12, 2.1, DARK, -1.25, 1.45, 0);                    // bed floor
+    B(g, 4.0, 1.1, .09, P, -1.25, 2.0, 1.05); B(g, 4.0, 1.1, .09, P, -1.25, 2.0, -1.05);
+    B(g, .09, 1.1, 2.1, P, .75, 2.0, 0); B(g, .09, 1.1, 2.1, P, -3.25, 2.0, 0);
+    add(g, new THREE.CylinderGeometry(.14, .14, 2.2, 24), CHROME, .2, 1.9, 0, 0, 0, .55); // hoist ram
+    add(g, new THREE.CylinderGeometry(.08, .08, 1.8, 24), CHROME, 1.75, 2.1, 1.14);     // exhaust stack
+    [[3.0, 1.05], [-1.0, 1.05], [-2.1, 1.05]].forEach(([x, z]) => {
+      wheel(g, x, z); wheel(g, x, -z);
+      B(g, 1.15, .08, .62, DARK, x, 1.08, z < 0 ? -1.12 : 1.12);
+    });
+    return g;
+  }
+
+  function excavator(p) {
+    const g = new THREE.Group(), P = paint(p);
+    [-1.15, 1.15].forEach(z => {                                    // tracks
+      B(g, 3.6, .55, .5, DARK, 0, .4, z);
+      CYL_Z(g, .3, .5, DARK, -1.8, .4, z); CYL_Z(g, .3, .5, DARK, 1.8, .4, z);
+    });
+    B(g, 2.4, .7, 2.1, P, -.1, 1.05, 0);                            // house
+    B(g, 1.2, .55, 1.9, P, -1.1, 1.6, 0);                           // engine cover
+    B(g, .9, .9, 2.1, DARK, -2.0, 1.1, 0);                          // counterweight
+    B(g, 1.2, 1.4, 1.2, P, .5, 2.0, -.55);                          // cab
+    B(g, .04, 1.0, 1.0, GLASS, 1.12, 2.0, -.55); B(g, 1.0, 1.0, .04, GLASS, .5, 2.0, -1.16);
+    B(g, 1.3, .1, 1.3, P, .5, 2.78, -.55);
+    const boom = new THREE.Group(); boom.position.set(.5, 1.3, .45); boom.rotation.z = .85; g.add(boom);
+    B(boom, 2.7, .42, .5, P, 1.35, 0, 0);
+    const stick = new THREE.Group(); stick.position.set(2.7, 0, 0); stick.rotation.z = -2.0; boom.add(stick);
+    B(stick, 2.2, .34, .4, P, 1.1, 0, 0);
+    const bucket = new THREE.Group(); bucket.position.set(2.2, 0, 0); bucket.rotation.z = -.4; stick.add(bucket);
+    B(bucket, .9, .7, 1.0, DARK, .35, -.2, 0);
+    B(bucket, .1, .12, 1.0, CHROME, .85, -.55, 0);
+    return g;
+  }
+
+  function trailer(p) {
+    const g = new THREE.Group(), P = paint(p);
+    B(g, 8.6, .22, 2.4, DARK, 0, 1.25, 0);                          // deck
+    B(g, 8.4, .2, 2.3, DARK, 0, 1.02, 0);                           // chassis
+    B(g, 8.6, .42, .12, P, 0, 1.6, 1.2); B(g, 8.6, .42, .12, P, 0, 1.6, -1.2);
+    B(g, 1.6, .9, 1.4, P, 4.6, 1.5, 0);                             // gooseneck head
+    [-2.4, -3.2, -4.0].forEach(x => { wheel(g, x, 1.15); wheel(g, x, -1.15); });
+    B(g, .3, 1.5, .3, CHROME, 3.4, .75, .8);                        // landing leg
+    return g;
+  }
+
+  function car(p) {
+    const g = new THREE.Group(), P = paint(p);
+    B(g, 4.4, .72, 1.9, P, 0, .9, 0);
+    B(g, 2.3, .66, 1.7, GLASS, -.2, 1.62, 0);
+    B(g, 2.0, .1, 1.5, P, -.2, 2.0, 0);
+    B(g, .05, .14, .4, LAMP, 2.2, .95, .6); B(g, .05, .14, .4, LAMP, 2.2, .95, -.6);
+    [-1.4, 1.4].forEach(x => { wheel(g, x, .92, .35, .3); wheel(g, x, -.92, .35, .3); });
+    return g;
+  }
+
+  function gear() {
+    const g = new THREE.Group();
+    add(g, new THREE.CylinderGeometry(1, 1, .34, 72), CHROME, 0, 0, 0, Math.PI / 2);
+    for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; B(g, .26, .3, .34, CHROME, Math.cos(a) * 1.08, Math.sin(a) * 1.08, 0, a - Math.PI / 2); }
+    CYL_Z(g, .36, .4, DARK, 0, 0, 0);
+    add(g, new THREE.CylinderGeometry(.14, .14, .42, 24), paint(0xb8c0cc), 0, 0, 0, Math.PI / 2);
+    g.position.y = 1.25;
+    return g;
+  }
+
+  const ORANGE = 0xE9A23B, WHITE = 0xE9ECF1, GRAPH = 0x2b313b, RED = 0xB8342B, SILVER = 0x9aa6b5;
+  SHOTS.dump = stage(() => dumpTruck(ORANGE), [14, 6.4, 14], [.4, 1.5, 0]);
+  SHOTS.dumpWhite = stage(() => dumpTruck(WHITE), [14, 6.4, 14], [.4, 1.5, 0]);
+  SHOTS.dumpGraph = stage(() => dumpTruck(GRAPH), [14, 6.4, 14], [.4, 1.5, 0]);
+  SHOTS.excavator = stage(() => excavator(ORANGE), [14, 6.8, 14], [.6, 1.7, 0]);
+  SHOTS.excavatorRed = stage(() => excavator(RED), [14, 6.8, 14], [.6, 1.7, 0]);
+  SHOTS.trailer = stage(() => trailer(WHITE), [15, 5.2, 15], [.6, 1.5, 0]);
+  SHOTS.car = stage(() => car(SILVER), [10, 4.2, 10], [0, 1, 0]);
+  SHOTS.gear = stage(gear, [3.2, 2.6, 4.8], [0, 1.25, 0]);
+  R.dispose();
+})();
+
+/* ---- catalog ---- */
+const CATS = { parts: "Запчасти", cars: "Легковые автомобили", trucks: "Грузовые автомобили", special: "Спецтехника", trailers: "Прицепы и полуприцепы" };
+const ITEMS = [
+  { id: 1, cat: "parts", img: "gear", title: "Тормозные колодки передние КамАЗ 6520", art: "KM-6520-BP", brand: "Пример", state: "В наличии", specs: [["Совместимость", "КамАЗ 6520, 2010–2020"], ["Категория", "Тормозная система"], ["Срок поставки", "1–3 дня"]] },
+  { id: 2, cat: "parts", img: "gear", title: "Фильтр масляный MAN TGX", art: "MN-TGX-OF", brand: "Пример", state: "В наличии", specs: [["Совместимость", "MAN TGX, D26"], ["Категория", "Фильтры"], ["Срок поставки", "1–3 дня"]] },
+  { id: 3, cat: "parts", img: "gear", title: "Ремень генератора Volvo FH", art: "VL-FH-BLT", brand: "Пример", state: "Под заказ", specs: [["Совместимость", "Volvo FH, FM"], ["Категория", "Ремни"], ["Срок поставки", "5–10 дней"]] },
+  { id: 4, cat: "parts", img: "gear", title: "Амортизатор кабины ГАЗ Газель", art: "GZ-CAB-AM", brand: "Пример", state: "В наличии", specs: [["Совместимость", "ГАЗ Газель Next"], ["Категория", "Подвеска"], ["Срок поставки", "1–3 дня"]] },
+  { id: 5, cat: "cars", img: "car", title: "Легковой автомобиль, новый, под заказ", art: "CAR-NEW-01", brand: "По запросу", state: "Под заказ", specs: [["Состояние", "Новый"], ["Срок поставки", "Уточняется"], ["Осмотр", "По записи"]] },
+  { id: 6, cat: "cars", img: "car", title: "Легковой автомобиль с пробегом", art: "CAR-USED-02", brand: "По запросу", state: "В наличии", specs: [["Состояние", "Б/у"], ["Пробег", "Укажем при заявке"], ["Осмотр", "По записи"]] },
+  { id: 7, cat: "trucks", img: "dump", title: "Самосвал КамАЗ 6520, 2018", art: "TR-KM-6520", brand: "КамАЗ", state: "В наличии", specs: [["Состояние", "Б/у"], ["Год", "2018"], ["Колёсная формула", "6×4"], ["Осмотр", "По записи"]] },
+  { id: 8, cat: "trucks", img: "dumpWhite", title: "Бортовой грузовик ГАЗ Газон Next", art: "TR-GZ-NX", brand: "ГАЗ", state: "Под заказ", specs: [["Состояние", "Новый"], ["Колёсная формула", "4×2"], ["Срок поставки", "Уточняется"]] },
+  { id: 9, cat: "trucks", img: "dumpGraph", title: "Седельный тягач Volvo FH", art: "TR-VL-FH", brand: "Volvo", state: "В наличии", specs: [["Состояние", "Б/у"], ["Колёсная формула", "6×2"], ["Осмотр", "По записи"]] },
+  { id: 10, cat: "special", img: "excavator", title: "Экскаватор-погрузчик JCB 3CX", art: "SP-JCB-3CX", brand: "JCB", state: "В наличии", specs: [["Состояние", "Б/у"], ["Тип", "Экскаватор-погрузчик"], ["Осмотр", "По записи"]] },
+  { id: 11, cat: "special", img: "excavatorRed", title: "Гусеничный экскаватор", art: "SP-XCMG-LW", brand: "XCMG", state: "Под заказ", specs: [["Состояние", "Новый"], ["Тип", "Гусеничный экскаватор"], ["Срок поставки", "Уточняется"]] },
+  { id: 12, cat: "trailers", img: "trailer", title: "Полуприцеп бортовой, 3 оси, 2021", art: "PR-BRT-3", brand: "Пример", state: "В наличии", specs: [["Тип", "Бортовой"], ["Оси", "3"], ["Год", "2021"], ["Осмотр", "По записи"]] },
+  { id: 13, cat: "trailers", img: "trailer", title: "Полуприцеп-цистерна", art: "PR-CST-01", brand: "Пример", state: "Под заказ", specs: [["Тип", "Цистерна"], ["Оси", "3"], ["Срок поставки", "Уточняется"]] }
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const card = it => `<a class="card" href="#item-${it.id}">
+  <div class="frame"><img src="${SHOTS[it.img]}" alt="${esc(it.title)}" loading="lazy"></div>
+  <div class="title">${esc(it.title)}</div>
+  <div class="meta"><b>${esc(it.state)}</b> · арт. ${esc(it.art)}</div>
+  <div class="price">Цена по запросу</div></a>`;
+const ROWS = [["parts", "Запчасти", "По марке, узлу и артикулу", "gear"], ["cars", "Легковые автомобили", "Новые и с пробегом", "car"], ["trucks", "Грузовые автомобили", "Самосвалы, тягачи, фургоны", "dump"], ["special", "Спецтехника", "Экскаваторы, погрузчики, краны", "excavator"], ["trailers", "Прицепы и полуприцепы", "Бортовые, цистерны, платформы", "trailer"]];
+
+const $ = s => document.querySelector(s);
+let state = { cat: "all", q: "", topic: "Запчасть" };
+
+function renderFilters() {
+  $("#filters").innerHTML = [["all", "Все"], ...Object.entries(CATS)].map(([k, v]) =>
+    `<a href="#catalog${k === "all" ? "" : "-" + k}" aria-current="${state.cat === k}">${esc(v)}</a>`).join("");
+}
+function renderGrid() {
+  const q = state.q.trim().toLowerCase();
+  const list = ITEMS.filter(it => (state.cat === "all" || it.cat === state.cat) &&
+    (!q || (it.title + " " + it.art + " " + it.brand).toLowerCase().includes(q)));
+  $("#grid").innerHTML = list.map(card).join("");
+  $("#empty").hidden = list.length > 0;
+}
+function renderItem(id) {
+  const it = ITEMS.find(x => x.id === Number(id));
+  if (!it) { $("#item-root").innerHTML = `<p>Товар не найден. <a href="#catalog">Вернуться в каталог</a></p>`; return; }
+  state.topic = { parts: "Запчасть", cars: "Легковой автомобиль", trucks: "Грузовой автомобиль", special: "Спецтехника", trailers: "Прицеп или полуприцеп" }[it.cat];
+  $("#item-root").innerHTML = `
+    <p class="crumbs"><a href="#home">Главная</a> / <a href="#catalog-${it.cat}">${esc(CATS[it.cat])}</a> / ${esc(it.title)}</p>
+    <div class="item">
+      <img src="${SHOTS[it.img]}" alt="${esc(it.title)}">
+      <div>
+        <h1 style="font-size:clamp(1.6rem,3.2vw,2.4rem)">${esc(it.title)}</h1>
+        <div class="price-big">Цена по запросу</div>
+        <p class="muted" style="font-size:14px">${esc(it.state)}</p>
+        <table class="spec">
+          <tr><th>Артикул</th><td>${esc(it.art)}</td></tr>
+          <tr><th>Марка</th><td>${esc(it.brand)}</td></tr>
+          ${it.specs.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join("")}
+        </table>
+        <div class="row-btns">
+          <a class="btn solid" href="#contacts">Оставить заявку</a>
+          <a class="btn line" href="tel:+79990000000">+7 (999) 000-00-00</a>
+        </div>
+      </div>
+    </div>`;
+}
+function route() {
+  const h = location.hash.slice(1) || "home";
+  const [name, arg] = h.split(/-(.*)/s);
+  const view = ["home", "catalog", "item", "about", "delivery", "guarantee", "contacts"].includes(name) ? name : "home";
+  document.querySelectorAll(".view").forEach(v => v.hidden = v.dataset.view !== view);
+  document.querySelectorAll("[data-nav]").forEach(a => a.setAttribute("aria-current", a.dataset.nav === view ? "page" : "false"));
+  if (view === "catalog") { state.cat = CATS[arg] ? arg : "all"; renderFilters(); renderGrid(); }
+  if (view === "item") renderItem(arg);
+  if (view === "contacts") $("#topic").value = state.topic;
+  window.scrollTo(0, 0);
+}
+$("#hero-img").src = SHOTS.dump;
+$("#rows").innerHTML = ROWS.map(([k, name, desc, img]) =>
+  `<a class="row" href="#catalog-${k}"><div><div class="name">${esc(name)}</div><div class="desc">${esc(desc)}</div></div><img src="${SHOTS[img]}" alt="" loading="lazy"></a>`).join("");
+$("#home-grid").innerHTML = ITEMS.filter(i => [1, 7, 10, 12].includes(i.id)).map(card).join("");
+$("#q").addEventListener("input", e => { state.q = e.target.value; renderGrid(); });
+$("#req").addEventListener("submit", e => { e.preventDefault(); $("#ok").hidden = false; });
+window.addEventListener("hashchange", route);
+route();
+</script>
