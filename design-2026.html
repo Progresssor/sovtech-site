@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>СовТех: техника и запчасти, доставка по России</title>
+<meta name="description" content="СовТех: самосвалы, тягачи, спецтехника и запчасти. Подбор по VIN, проверка склада и доставка по России.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0C0F14; --ink-2: #161B23; --fg: #F2F3F5; --mute: #8F98A6; --line: rgba(255,255,255,.14);
+  --light: #F1F2F4; --light-ink: #0C0F14; --light-mute: #5D6675; --accent: #E9A23B; --accent-ink: #15100A;
+  --text: "Manrope", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; }
+html { background: var(--ink); }
+body { color: var(--fg); font: 400 16px/1.55 var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+.wrap { width: min(1280px, 100% - 48px); margin-inline: auto; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.eyebrow { font: 600 11px var(--text); letter-spacing: .32em; text-transform: uppercase; color: var(--mute); }
+
+/* header */
+.top { display: flex; justify-content: space-between; align-items: center; height: 84px; }
+.logo { display: flex; align-items: center; gap: 12px; font: 700 20px var(--text); letter-spacing: -.01em; }
+.logo svg { width: 38px; height: 22px; }
+.top nav { display: flex; gap: 34px; font-size: 14px; color: var(--mute); }
+.top nav a { transition: color .2s; } .top nav a:hover { color: var(--fg); }
+.pill { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 20px; border: 1px solid var(--line); border-radius: 999px; font-size: 14px; transition: border-color .25s, background-color .25s; }
+.pill:hover { border-color: var(--accent); background: rgba(233,162,59,.08); }
+.pill i { font-style: normal; transition: transform .3s; } .pill:hover i { transform: translateX(3px); }
+
+/* hero: a light-weight headline over a photograph, a glass card of live facts */
+.hero { position: relative; min-height: min(92vh, 860px); display: flex; align-items: flex-end; overflow: hidden; }
+.hero .bg { position: absolute; inset: 0; background: url("assets/img/photo-f118473826-960.jpg") 62% 60% / cover no-repeat; }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(12,15,20,.92) 8%, rgba(12,15,20,.45) 60%, rgba(12,15,20,.2)), linear-gradient(0deg, var(--ink) 0%, transparent 40%); }
+.hero .wrap { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 340px; gap: 40px; align-items: end; padding-bottom: clamp(56px, 9vh, 110px); }
+.hero h1 { font: 200 clamp(56px, 8.6vw, 124px)/.98 var(--text); letter-spacing: -.035em; }
+.hero h1 b { font-weight: 800; display: block; }
+.hero .sub { margin-top: 26px; max-width: 40ch; color: #C5CBD5; font-size: 17px; }
+.hero .btns { display: flex; gap: 12px; margin-top: 34px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 12px; height: 54px; padding: 0 24px; border-radius: 999px; font-weight: 700; font-size: 15px; transition: transform .25s, background-color .25s, color .25s; }
+.btn.solid { background: var(--accent); color: var(--accent-ink); }
+.btn.solid:hover { transform: translateY(-2px); background: #F2B24E; }
+.btn.glass { background: rgba(255,255,255,.08); backdrop-filter: blur(8px); border: 1px solid var(--line); }
+.btn.glass:hover { transform: translateY(-2px); border-color: var(--fg); }
+.btn .arr { transition: transform .3s; } .btn:hover .arr { transform: translateX(4px); }
+.glass-card { background: rgba(14,17,23,.55); backdrop-filter: blur(16px) saturate(120%); border: 1px solid var(--line); border-radius: 22px; padding: 26px; }
+.glass-card h3 { font: 600 13px var(--text); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.glass-card form { margin-top: 18px; display: grid; gap: 12px; }
+.glass-card input { width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--line); background: rgba(0,0,0,.25); color: var(--fg); padding: 0 14px; font: 500 15px var(--text); letter-spacing: .06em; text-transform: uppercase; transition: border-color .25s; }
+.glass-card input:focus { outline: none; border-color: var(--accent); }
+.glass-card .meter { height: 3px; background: rgba(255,255,255,.12); border-radius: 3px; overflow: hidden; }
+.glass-card .meter i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .35s ease; }
+.glass-card .hint { font-size: 12px; color: var(--mute); }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+.facts b { display: block; font: 300 34px/1 var(--text); letter-spacing: -.02em; }
+.facts span { font-size: 12px; color: var(--mute); }
+
+/* angled divider and a light section with a chevron edge */
+.light { position: relative; background: var(--light); color: var(--light-ink); padding: clamp(96px, 13vw, 170px) 0 clamp(72px, 10vw, 120px); clip-path: polygon(0 0, 100% 9%, 100% 100%, 0 100%); margin-top: -2px; }
+.light .eyebrow { color: var(--light-mute); }
+.split { display: grid; grid-template-columns: 1.2fr .8fr; gap: 56px; align-items: start; margin-top: 26px; }
+.light h2 { font: 200 clamp(44px, 6vw, 88px)/1 var(--text); letter-spacing: -.035em; }
+.light h2 b { font-weight: 800; display: block; }
+.light h2 span { color: var(--light-mute); }
+.light p.lead { color: var(--light-mute); font-size: 17px; max-width: 42ch; }
+.more { display: inline-flex; align-items: center; gap: 12px; margin-top: 24px; font-weight: 700; }
+.more i { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--light-ink); display: grid; place-items: center; font-style: normal; transition: background-color .25s, color .25s, transform .3s; }
+.more:hover i { background: var(--light-ink); color: var(--light); transform: translateX(4px); }
+
+/* categories: horizontal cards with an arrow that turns on hover */
+.dark { padding: clamp(80px, 11vw, 140px) 0; }
+.dark h2 { font: 200 clamp(42px, 5.4vw, 80px)/1 var(--text); letter-spacing: -.035em; }
+.dark h2 b { font-weight: 800; }
+.cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 52px; }
+.cat { position: relative; height: 300px; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 22px; background: var(--ink-2); border: 1px solid var(--line); transition: transform .35s cubic-bezier(.2,.7,.2,1), border-color .3s; }
+.cat:hover { transform: translateY(-4px); border-color: rgba(233,162,59,.6); }
+.cat .pic { position: absolute; inset: 0; background: linear-gradient(160deg, #2A313C, #0E1218); transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.cat:hover .pic { transform: scale(1.05); }
+.cat .pic.photo { background: url("assets/img/photo-f118473826-960.jpg") 50% 55% / cover; }
+.cat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(12,15,20,.92), rgba(12,15,20,.2) 60%); }
+.cat > * { position: relative; z-index: 1; }
+.cat .n { font: 600 12px var(--text); letter-spacing: .2em; color: var(--mute); }
+.cat .row { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
+.cat h3 { font: 600 22px/1.15 var(--text); }
+.cat .go { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--fg); display: grid; place-items: center; flex: none; transition: background-color .3s, color .3s, border-color .3s, transform .35s; }
+.cat:hover .go { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: rotate(-45deg); }
+
+/* solutions list: hairlines, a hover that slides the title */
+.solutions { margin-top: 56px; border-top: 1px solid var(--line); }
+.solutions a { display: grid; grid-template-columns: 80px 1fr auto; gap: 18px; align-items: baseline; padding: 26px 0; border-bottom: 1px solid var(--line); transition: padding .35s cubic-bezier(.2,.7,.2,1); }
+.solutions a:hover { padding-left: 16px; }
+.solutions a span { font: 300 14px var(--text); color: var(--mute); }
+.solutions a h3 { font: 500 clamp(22px, 2.6vw, 34px)/1.1 var(--text); letter-spacing: -.02em; }
+.solutions a p { font-size: 14px; color: var(--mute); max-width: 38ch; text-align: right; }
+
+/* the demo's data band */
+.band { padding: clamp(72px, 9vw, 120px) 0; border-top: 1px solid var(--line); }
+.band .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); margin-top: 48px; }
+.band .grid div { background: var(--ink); padding: 34px 28px; transition: background-color .3s; }
+.band .grid div:hover { background: var(--ink-2); }
+.band .grid b { display: block; font: 200 clamp(56px, 6.4vw, 96px)/1 var(--text); letter-spacing: -.04em; }
+.band .grid p { margin-top: 12px; color: var(--mute); font-size: 15px; max-width: 26ch; }
+
+footer { border-top: 1px solid var(--line); padding: 34px 0 40px; color: var(--mute); font-size: 13px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+footer a { color: var(--fg); }
+
+@media (max-width: 980px) {
+  .hero .wrap, .split { grid-template-columns: 1fr; }
+  .cats { grid-template-columns: 1fr 1fr; }
+  .top nav { display: none; }
+  .solutions a { grid-template-columns: 50px 1fr; }
+  .solutions a p { display: none; }
+  .band .grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) { .cats { grid-template-columns: 1fr; } .pill { display: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<header class="wrap top">
+  <a class="logo" href="#top" aria-label="СовТех">
+    <svg viewBox="0 0 38 22" aria-hidden="true"><path d="M8 22 L16 0 H21 L13 22 Z" fill="#E9A23B"/><path d="M18 22 L26 0 H31 L23 22 Z" fill="#E9A23B"/><path d="M28 22 L36 0 H38 L30 22 Z" fill="#E9A23B" opacity=".6"/></svg>
+    СовТех
+  </a>
+  <nav aria-label="Основное"><a href="#categories">Техника</a><a href="#solutions">Услуги</a><a href="#numbers">Цифры</a><a href="#contacts">Контакты</a></nav>
+  <a class="pill" href="#contacts">Связаться <i>→</i></a>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="bg" role="img" aria-label="Самосвал на трассе"></div>
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Самосвалы · Тягачи · Спецтехника · Запчасти</p>
+        <h1 style="margin-top:22px">Техника, которая<b>едет вовремя</b></h1>
+        <p class="sub">Продаём технику и запчасти для частных клиентов, ИП и организаций. Подберём деталь по VIN или артикулу и доставим по России.</p>
+        <div class="btns">
+          <a class="btn solid" href="https://progresssor.github.io/sovtech-site/#catalog-trucks">Смотреть самосвалы <span class="arr">→</span></a>
+          <a class="btn glass" href="#vin">Подбор по VIN</a>
+        </div>
+      </div>
+      <aside class="glass-card" id="vin" aria-labelledby="vh">
+        <h3 id="vh">Подбор по VIN</h3>
+        <form onsubmit="event.preventDefault();document.getElementById('ok').textContent='Демо-версия: заявка не отправлена.';">
+          <input id="vin-input" maxlength="17" placeholder="XTC65201…" autocomplete="off" aria-describedby="vhint">
+          <span class="meter" aria-hidden="true"><i id="mi"></i></span>
+          <span class="hint" id="vhint">17 знаков, латиница и цифры</span>
+          <button class="btn solid" type="submit" style="justify-content:center">Отправить заявку</button>
+          <p class="hint" id="ok" aria-live="polite"></p>
+        </form>
+        <div class="facts">
+          <div><b>48 ч</b><span>резерв детали при заявке сегодня</span></div>
+          <div><b>3–5</b><span>дней доставки по России</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="light">
+    <div class="wrap">
+      <p class="eyebrow">Больше, чем запчасти</p>
+      <div class="split">
+        <h2>Подбираем<b>деталь</b><span>под вашу технику</span></h2>
+        <div>
+          <p class="lead">Проверяем совместимость по VIN, сверяем склад и сроки, оформляем договор или счёт для физлиц и организаций.</p>
+          <a class="more" href="#solutions">Как это работает <i>→</i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="categories">
+    <div class="wrap">
+      <p class="eyebrow">Техника</p>
+      <h2 style="margin-top:18px">Что возим<b>и продаём</b></h2>
+      <div class="cats">
+        <a class="cat" href="https://progresssor.github.io/sovtech-site/#catalog-trucks"><div class="pic photo"></div><span class="n">01</span><div class="row"><h3>Самосвалы</h3><span class="go">→</span></div></a>
+        <a class="cat" href="https://progresssor.github.io/sovtech-site/#catalog-trucks"><div class="pic"></div><span class="n">02</span><div class="row"><h3>Тягачи</h3><span class="go">→</span></div></a>
+        <a class="cat" href="https://progresssor.github.io/sovtech-site/#catalog-special"><div class="pic"></div><span class="n">03</span><div class="row"><h3>Спецтехника</h3><span class="go">→</span></div></a>
+        <a class="cat" href="https://progresssor.github.io/sovtech-site/#catalog-parts"><div class="pic"></div><span class="n">04</span><div class="row"><h3>Запчасти</h3><span class="go">→</span></div></a>
+      </div>
+
+      <div class="solutions" id="solutions">
+        <a href="#vin"><span>01</span><h3>Заявка по VIN</h3><p>Подберём деталь по номеру рамы и документам.</p></a>
+        <a href="#contacts"><span>02</span><h3>Договор и счёт</h3><p>Для физлиц и организаций, с НДС или без.</p></a>
+        <a href="#contacts"><span>03</span><h3>Доставка по России</h3><p>Транспортной компанией или самовывоз со склада.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="numbers">
+    <div class="wrap">
+      <p class="eyebrow">В цифрах</p>
+      <div class="grid">
+        <div><b>4</b><p>позиции в наличии по карточке примера</p></div>
+        <div><b>48</b><p>часов резерва при заявке, демо-значение</p></div>
+        <div><b>14</b><p>дней гарантии на подбор, демо-значение</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contacts">
+  <div class="wrap">
+    <span>© 2026 СовТех · Демо-версия. Фото: Andrej Danković, CC BY-SA 4.0, Wikimedia Commons.</span>
+    <span><a href="tel:+79990000000">+7 (999) 000-00-00</a> · hello@sovtech.example</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var input = document.getElementById('vin-input'), bar = document.getElementById('mi'), hint = document.getElementById('vhint');
+  input.addEventListener('input', function () {
+    var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    input.value = v;
+    bar.style.width = (v.length / 17 * 100) + '%';
+    hint.textContent = v.length === 17 ? 'VIN полный, проверим по базе' : v.length + ' из 17 знаков';
+  });
+})();
+</script>
+</body>
+</html>
