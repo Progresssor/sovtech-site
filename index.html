@@ -52,6 +52,9 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .hero figure { margin: 0; }
 .hero img { width: 100%; height: auto; border-radius: 20px; animation: reveal 1.1s var(--ease-out) both; }
 @keyframes reveal { from { opacity: 0; transform: translateY(24px) scale(.98); } to { opacity: 1; transform: none; } }
+/* h1 words rise in once, staggered by --i */
+.hero h1 .w { display: inline-block; opacity: 0; transform: translateY(.6em); animation: wrise .8s var(--ease-out) forwards; animation-delay: calc(.08s * var(--i)); }
+@keyframes wrise { to { opacity: 1; transform: none; } }
 
 /* directions as rows, not cards */
 .rows { border-top: 1px solid var(--line); margin-top: 40px; }
@@ -135,6 +138,7 @@ footer.foot h3 { color: var(--fg); font: 600 12px var(--text); text-transform: u
 @media (max-width: 860px) { .hero .wrap, .item { grid-template-columns: 1fr; } footer.foot .wrap { grid-template-columns: 1fr 1fr; } .row { grid-template-columns: 1fr 120px; } .row img { width: 120px; } }
 @media (max-width: 560px) { .nav { display: none; } input.search { width: 100%; } }
 @media (prefers-reduced-motion: reduce) {
+  .hero h1 .w { opacity: 1; transform: none; animation: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
@@ -160,7 +164,7 @@ footer.foot h3 { color: var(--fg); font: 600 12px var(--text); text-transform: u
     <div class="hero">
       <div class="wrap">
         <div>
-          <h1>Самосвалы, тягачи и спецтехника с наличием и доставкой</h1>
+          <h1 aria-label="Самосвалы, тягачи и спецтехника с наличием и доставкой"><span class="w" aria-hidden="true" style="--i:0">Самосвалы,</span> <span class="w" aria-hidden="true" style="--i:1">тягачи</span> <span class="w" aria-hidden="true" style="--i:2">и</span> <span class="w" aria-hidden="true" style="--i:3">спецтехника</span> <span class="w" aria-hidden="true" style="--i:4">с</span> <span class="w" aria-hidden="true" style="--i:5">наличием</span> <span class="w" aria-hidden="true" style="--i:6">и</span> <span class="w" aria-hidden="true" style="--i:7">доставкой</span></h1>
           <p class="lead">Продаём технику и запчасти для частных клиентов, ИП и организаций. Подберём деталь по артикулу или VIN, проверим наличие и доставим по России.</p>
           <div class="actions">
             <a class="btn solid" href="#catalog">Смотреть каталог</a>
@@ -304,11 +308,12 @@ footer.foot h3 { color: var(--fg); font: 600 12px var(--text); text-transform: u
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>if(!window.THREE)document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>')</script>
 <script>
 /* Renders built at load from real geometry: physical paint with clearcoat, chrome, glass,
    an environment map from softboxes, soft shadows. Each becomes a JPEG in SHOTS. */
 const SHOTS = {};
-(function renderAll() {
+function renderAll() {
   const R = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
   R.setSize(1200, 750, false);
   R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -436,10 +441,11 @@ const SHOTS = {};
   SHOTS.car = stage(() => car(SILVER), [10, 4.2, 10], [0, 1, 0]);
   SHOTS.gear = stage(gear, [3.2, 2.6, 4.8], [0, 1.25, 0]);
   R.dispose();
-})();
+}
+try { renderAll(); } catch (e) { console.error('3D skipped, catalog still works', e); }
 
 /* ---- catalog ---- */
-const CATS = { parts: "Запчасти", cars: "Легковые автомобили", trucks: "Грузовые автомобили", special: "Спецтехника", trailers: "Прицепы и полуприцепы" };
+const CATS = { parts: "Запчасти", cars: "Легковые автомобили", trucks: "Самосвалы и тягачи", special: "Спецтехника", trailers: "Прицепы и полуприцепы" };
 const ITEMS = [
   { id: 1, cat: "parts", img: "gear", title: "Тормозные колодки передние КамАЗ 6520", art: "KM-6520-BP", brand: "Пример", state: "В наличии", specs: [["Совместимость", "КамАЗ 6520, 2010–2020"], ["Категория", "Тормозная система"], ["Срок поставки", "1–3 дня"]] },
   { id: 2, cat: "parts", img: "gear", title: "Фильтр масляный MAN TGX", art: "MN-TGX-OF", brand: "Пример", state: "В наличии", specs: [["Совместимость", "MAN TGX, D26"], ["Категория", "Фильтры"], ["Срок поставки", "1–3 дня"]] },
@@ -461,7 +467,7 @@ const card = it => `<a class="card" href="#item-${it.id}">
   <div class="title">${esc(it.title)}</div>
   <div class="meta"><b>${esc(it.state)}</b> · арт. ${esc(it.art)}</div>
   <div class="price">Цена по запросу</div></a>`;
-const ROWS = [["parts", "Запчасти", "По марке, узлу и артикулу", "gear"], ["cars", "Легковые автомобили", "Новые и с пробегом", "car"], ["trucks", "Грузовые автомобили", "Самосвалы, тягачи, фургоны", "dump"], ["special", "Спецтехника", "Экскаваторы, погрузчики, краны", "excavator"], ["trailers", "Прицепы и полуприцепы", "Бортовые, цистерны, платформы", "trailer"]];
+const ROWS = [["parts", "Запчасти", "По марке, узлу и артикулу", "gear"], ["cars", "Легковые автомобили", "Новые и с пробегом", "car"], ["trucks", "Самосвалы и тягачи", "Самосвалы, тягачи, фургоны", "dump"], ["special", "Спецтехника", "Экскаваторы, погрузчики, краны", "excavator"], ["trailers", "Прицепы и полуприцепы", "Бортовые, цистерны, платформы", "trailer"]];
 
 const $ = s => document.querySelector(s);
 let state = { cat: "all", q: "", topic: "Запчасть" };
